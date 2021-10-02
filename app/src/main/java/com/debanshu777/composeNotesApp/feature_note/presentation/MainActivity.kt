@@ -1,4 +1,4 @@
-package com.debanshu777.composeNotesApp
+package com.debanshu777.composeNotesApp.feature_note.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
