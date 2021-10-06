@@ -1,5 +1,6 @@
 package com.debanshu777.composeNotesApp.feature_note.presentation.details_note
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb
@@ -20,77 +21,79 @@ import javax.inject.Inject
 class DetailNoteViewModel @Inject constructor(
     private val noteUseCases: NoteUseCases,
     savedStateHandle: SavedStateHandle
-) : ViewModel(){
+) : ViewModel() {
 
     private val _noteTitle = mutableStateOf(NotesTextFieldState(
-        hint = "Enter title ..."
+        hint = "Enter title..."
     ))
     val noteTitle: State<NotesTextFieldState> = _noteTitle
 
     private val _noteContent = mutableStateOf(NotesTextFieldState(
-        hint = "Enter Content ..."
+        hint = "Enter content..."
     ))
     val noteContent: State<NotesTextFieldState> = _noteContent
 
-    private val _noteColor = mutableStateOf<Int>(Note.noteColors.random().toArgb())
+    private val _noteColor = mutableStateOf(Note.noteColors.random().toArgb())
     val noteColor: State<Int> = _noteColor
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
-    private var currentNoteId :Int?=null
+    private var currentNoteId: Int? = null
 
-    init{
-        savedStateHandle.get<Int>("noteId")?.let{ noteId->
-            if(noteId !=-1){
+    init {
+        savedStateHandle.get<Int>("noteId")?.let { noteId ->
+            if(noteId != -1) {
                 viewModelScope.launch {
-                    noteUseCases.getNote(noteId)?.also{ note->
-                        currentNoteId=note.id
-                        _noteTitle.value=noteTitle.value.copy(
+                    noteUseCases.getNote(noteId)?.also { note ->
+                        currentNoteId = note.id
+                        _noteTitle.value = noteTitle.value.copy(
                             text = note.title,
                             isHintVisible = false
                         )
-                        _noteContent.value=_noteContent.value.copy(
+                        _noteContent.value = _noteContent.value.copy(
                             text = note.content,
                             isHintVisible = false
                         )
-                        _noteColor.value=note.color
+                        _noteColor.value = note.color
                     }
                 }
             }
         }
     }
 
-    fun onEvent( event:DetailNoteEvent){
-        when(event){
-            is DetailNoteEvent.EnteredTitle ->{
+    fun onEvent(event: DetailNoteEvent) {
+        when(event) {
+            is DetailNoteEvent.EnteredTitle -> {
+                Log.e("Tag",_noteTitle.value.toString())
+                Log.e("Tag",_noteTitle.value.toString())
                 _noteTitle.value = noteTitle.value.copy(
-                    text = event.value
+                    text= event.value
                 )
             }
-            is DetailNoteEvent.ChangeTitleFocus ->{
+            is DetailNoteEvent.ChangeTitleFocus -> {
                 _noteTitle.value = noteTitle.value.copy(
                     isHintVisible = !event.focusState.isFocused &&
                             noteTitle.value.text.isBlank()
                 )
             }
-            is DetailNoteEvent.EnteredContent ->{
+            is DetailNoteEvent.EnteredContent -> {
                 _noteContent.value = noteContent.value.copy(
                     text = event.value
                 )
             }
-            is DetailNoteEvent.ChangeContentFocus ->{
+            is DetailNoteEvent.ChangeContentFocus -> {
                 _noteContent.value = noteContent.value.copy(
                     isHintVisible = !event.focusState.isFocused &&
                             noteContent.value.text.isBlank()
                 )
             }
-            is DetailNoteEvent.ChangeColor ->{
+            is DetailNoteEvent.ChangeColor -> {
                 _noteColor.value = event.color
             }
-            is DetailNoteEvent.SaveNote ->{
+            is DetailNoteEvent.SaveNote -> {
                 viewModelScope.launch {
-                    try{
+                    try {
                         noteUseCases.addNote(
                             Note(
                                 title = noteTitle.value.text,
@@ -101,10 +104,10 @@ class DetailNoteViewModel @Inject constructor(
                             )
                         )
                         _eventFlow.emit(UiEvent.SaveNote)
-                    }catch (e: InvalidNoteException){
+                    } catch(e: InvalidNoteException) {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
-                                message = e.message?: "Couldn't save note"
+                                message = e.message ?: "Couldn't save note"
                             )
                         )
                     }
@@ -113,7 +116,7 @@ class DetailNoteViewModel @Inject constructor(
         }
     }
 
-    sealed class  UiEvent {
+    sealed class UiEvent {
         data class ShowSnackbar(val message: String): UiEvent()
         object SaveNote: UiEvent()
     }
