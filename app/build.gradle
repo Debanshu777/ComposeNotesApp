@@ -87,3 +87,14 @@ dependencies {
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.3.0"
 }
+
+ktlint {
+    version = "0.34.0"
+    reporters {
+        reporter "plain"
+        reporter "checkstyle"
+        reporter "sarif"
+    }
+    outputToConsole = true
+    outputColorName = "RED"
+}
