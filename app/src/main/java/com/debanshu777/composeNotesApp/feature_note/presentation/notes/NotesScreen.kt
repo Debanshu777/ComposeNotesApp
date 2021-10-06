@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import com.debanshu777.composeNotesApp.feature_note.presentation.NotesViewModel
 import com.debanshu777.composeNotesApp.feature_note.presentation.notes.componenets.NoteItem
 import com.debanshu777.composeNotesApp.feature_note.presentation.notes.componenets.OrderSection
+import com.debanshu777.composeNotesApp.feature_note.presentation.utils.Screen
 import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
@@ -33,7 +34,7 @@ fun NotesScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = {
-
+                navController.navigate(Screen.DetailNoteScreen.route)
             },backgroundColor = MaterialTheme.colors.primary) {
                 Icon(imageVector = Icons.Default.Add, contentDescription ="Add Note" )
             }
@@ -85,7 +86,8 @@ fun NotesScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .clickable {
-
+                                navController.navigate(Screen.DetailNoteScreen.route +
+                                "?noteId=${note.id}&noteColor=${note.color}")
                             },
                         onDeleteClick = {
                             viewModel.onEvent(NotesEvent.DeleteNote(note))
