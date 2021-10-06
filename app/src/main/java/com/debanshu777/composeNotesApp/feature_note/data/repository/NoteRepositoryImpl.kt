@@ -9,7 +9,7 @@ class NoteRepositoryImpl(
     private val dao: NoteDao
 ) : NoteRepository {
 
-     override fun getNotes(): Flow<List<Note>> = dao.getNotes()
+    override fun getNotes(): Flow<List<Note>> = dao.getNotes()
 
     override suspend fun getNoteById(id: Int): Note? = dao.getNoteById(id)
 
