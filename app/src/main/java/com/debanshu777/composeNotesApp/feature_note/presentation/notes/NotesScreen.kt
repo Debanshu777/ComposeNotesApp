@@ -1,5 +1,6 @@
 package com.debanshu777.composeNotesApp.feature_note.presentation.notes
 
+import android.util.Size
 import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -19,6 +20,7 @@ import androidx.navigation.NavController
 import com.debanshu777.composeNotesApp.feature_note.presentation.NotesViewModel
 import com.debanshu777.composeNotesApp.feature_note.presentation.notes.componenets.NoteItem
 import com.debanshu777.composeNotesApp.feature_note.presentation.notes.componenets.OrderSection
+import com.debanshu777.composeNotesApp.feature_note.presentation.notes.componenets.StaggeredVerticalGrid
 import com.debanshu777.composeNotesApp.feature_note.presentation.utils.Screen
 import kotlinx.coroutines.launch
 
@@ -79,6 +81,7 @@ fun NotesScreen(
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
+
             LazyColumn(modifier = Modifier.fillMaxSize() ){
                 items(state.notes){ note->
                     NoteItem(

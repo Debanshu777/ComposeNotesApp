@@ -38,7 +38,7 @@ object AppModule {
         return  NoteUseCases(
             getNotes = GetNotes(repository),
             deleteNote = DeleteNote(repository),
-            addNote = AddNote(repository),
+             addNote = AddNote(repository),
             getNote = GetNote(repository)
         )
     }

@@ -16,6 +16,12 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
+plugins {
+    id "org.jlleitschuh.gradle.ktlint" version "10.2.0"
+    id "io.gitlab.arturbosch.detekt" version "1.17.1"
+}
+
+tasks.detekt.jvmTarget = "1.8"
 
 task clean(type: Delete) {
     delete rootProject.buildDir
